@@ -25,7 +25,7 @@ version: 1.0.0
 # About/contact
 author:
   name: Youth
-  description: 인문계 졸업. 외국계 회사에서 2년간 일함. <br> 커리어 리셋을 위해 그만두고 코딩공부를 시작함. <br>'코딩'의 'ㅋ'도 모르는 초보지만 열심히 초보 탈출을 위해 노력하고있습니다.
+  description: 인문계 졸업. <br>외국계 회사에서 2년간 일함. <br> 커리어 리셋을 위해 그만두고 코딩공부를 시작함. <br>  <br>'코딩'의 'ㅋ'도 모르는 초보지만 열심히 초보 탈출을 위해 노력하고있습니다.
   gravatar: # md5 hash of your email address
   contact:
     github: https://github.com/youth27
