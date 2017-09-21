@@ -1,15 +1,9 @@
 ---
-​---
 layout: post
 title: 야구게임 리팩토링 연습 & 새로운 부분 공부
 tags: java refactoring 구현연습
 categories: JAVA 
-​---
 ---
-
-
-
-
 
 #### 몰랐던 부분 / 알게 된 부분 
 
@@ -43,9 +37,6 @@ categories: JAVA
   	}
   ~~~
 
-  ​
-
-   
 
 
 #### 야구게임 리팩토링 todo
@@ -53,6 +44,7 @@ categories: JAVA
 [(야구게임 연습 repo바로가기)](https://github.com/youth27/java-whitelevel-review/tree/master/src/baseballPractice)
 
 - 야구게임 : 3자리 수를 입력받아서 정답을 맞춘다
+ 
 - 규칙
 
 1. 같은 자리수와 숫자가 맞으면 스트라이크
@@ -63,11 +55,10 @@ categories: JAVA
 
 4.  3 스트라이크면 게임 종료
 
-   ​
 
 - 1회 게임을 하는데에 필요한 것
 
-1. 정답이 있엉해요 - 최초 한번만 실행 게임이 실행됐을때 한번만
+1. 정답이 생성돼야함 - 최초 한번만 실행 게임이 실행됐을때 한번만 (컴퓨터가 정한 정답) 
 2.  3자리수를 사용자가 입력한다.
    1. 예외처리 (같은 수 입력, 0 입력 등)
 3. 사용자가 입력한 값이 맞는지 비교한다.
