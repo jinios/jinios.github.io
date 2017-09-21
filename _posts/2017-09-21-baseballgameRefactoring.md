@@ -20,7 +20,7 @@ categories: JAVA
 
   [이 블로그 글](https://m.blog.naver.com/PostView.nhn?blogId=geeyoming&logNo=220078572377&proxyReferer=https%3A%2F%2Fwww.google.co.kr%2F)에서 설명을 참고함. 
 
-- 생성자와 초기화  : [내 블로그](https://youth27.github.io/%EC%83%9D%EC%84%B1%EC%9E%90/%EB%B3%80%EC%88%98/%ED%95%84%EB%93%9C/%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4/%EC%B4%88%EA%B8%B0%ED%99%94/2017/09/20/Constructor/)에 정리함!
+- 생성자와 초기화  : [내 블로그](https://youth27.github.io/java/2017/09/20/Constructor/)에 정리함!
 
 - 클래스 변수 : 인스턴스변수를 어떤 다른 메소드끼리 공유할 일이 있다면 필드값으로 저장해두고 씁니다. 
 
