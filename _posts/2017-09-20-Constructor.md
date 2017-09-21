@@ -3,9 +3,9 @@ layout: post
 
 title: 생성자와 초기화, this, 필드와 변수
 
-tags: JAVA
+tags: java 생성자 변수 필드 인스턴스 초기화
 
-categories: 생성자 변수 필드 인스턴스 초기화 
+categories: JAVA
 ---
 
 
