@@ -107,6 +107,7 @@ h4, h5, h6 {
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+  letter-spacing: -.025rem;
 }
 
 strong {
@@ -118,6 +119,7 @@ strong {
 ul, ol, dl {
   margin-top: 0;
   margin-bottom: 1rem;
+  letter-spacing: -.025rem;
 }
 
 dt {
@@ -166,9 +168,8 @@ pre {
   margin-top: 0;
   margin-bottom: 1rem;
   padding: 1rem;
-  font-size: .8rem;
+  font-size: .74rem;
   line-height: 1.4;
-  white-space: pre;
   white-space: pre;
   word-break: break-all;
   word-wrap: break-word;
