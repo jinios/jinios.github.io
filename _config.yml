@@ -40,7 +40,7 @@ nav:
   About me:
     - '/about/'
   Github Project:
-    - 'https://youth27.github.io/'
+    - 'https://github.com/youth27'
 
 # Where are tags and categories displayed
 tag_page: '/blog/tags/'
