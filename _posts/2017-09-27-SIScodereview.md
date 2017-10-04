@@ -18,34 +18,37 @@ categories: JAVA
 초기화메서드가 있을땐 초기화메서드 > 실행메서드1 > 초기화메서드 > 실행메서드2 … 이런식으로 실행됨
 
 ```java
-	  @Before
-    public void setup() {
-		  session = new CourseSession("ENGL", "101");
-    }
+	@Before
+	public void setup() {
+		session = new CourseSession("ENGL", "101");
+	}
 
-	  @Test
-    public void create() throws Exception {
-        assertEquals("ENGL", session.getDepartment());
-        assertEquals("101", session.getNumber());
-        assertEquals(0, session.getNumberOfStudents());
-    }
-    
-    @Test
-    public void enroll() throws Exception {
-        Student firstStudent = new Student("쿠키");
-        session.enroll(firstStudent);
-        assertEquals(1, session.getNumberOfStudents());
-        ArrayList<Student> allStuents = session.getAllStudents();
-        assertEquals(1, allStuents.size());
-        assertEquals(firstStudent, allStuents.get(0));
+	@Test
+	public void create() throws Exception {
+		assertEquals("ENGL", session.getDepartment());
+		assertEquals("101", session.getNumber());
+		assertEquals(0, session.getNumberOfStudents());
+	}
 
-        Student secondStudent = new Student("애플");
-        session.enroll(secondStudent);
-        assertEquals(2, session.getNumberOfStudents());
-        assertEquals(2, allStuents.size());
-        assertEquals(firstStudent, allStuents.get(0));
-        assertEquals(secondStudent, allStuents.get(1));
-    }
+	@Test
+	public void enroll() throws Exception {
+		Student firstStudent = new Student("쿠키");
+		session.enroll(firstStudent);
+		assertEquals(1, session.getNumberOfStudents());
+		ArrayList<Student> allStuents = session.getAllStudents();
+		assertEquals(1, allStuents.size());
+		assertEquals(firstStudent, allStuents.get(0));
+
+		Student secondStudent = new Student("애플");
+		session.enroll(secondStudent);
+		assertEquals(2, session.getNumberOfStudents());
+		assertEquals(2, allStuents.size());
+		assertEquals(firstStudent, allStuents.get(0));
+		assertEquals(secondStudent, allStuents.get(1));
+	}
+
+
+
 ```
 
 
