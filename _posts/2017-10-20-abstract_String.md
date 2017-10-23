@@ -2,7 +2,7 @@
 layout: post
 title: 스위프트의 추상화 - String
 tags: ios swift string abstract
-categories: 
+categories: Swift
 ---
 
 ### 스위프트의 추상화 - String
