@@ -19,7 +19,7 @@ categories: Study
 
 - Xcode의 네비게이터에서 프로덕트 파일을 선택한다. 
 
-  ![스크린샷 2017-11-06 오후 3.33.18](/Users/jeonmijin/Documents/gitPage/youth27.github.io/downloads/스크린샷 2017-11-06 오후 3.33.18.png)
+   ![스크린샷 2017-11-06 오후 3.33.18](/temp/스크린샷 2017-11-06 오후 3.33.18.png)
 
 - 선택 후 오른쪽의 유틸리티 탭에서 full path를 알아낸다.
 
