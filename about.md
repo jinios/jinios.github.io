@@ -2,6 +2,7 @@
 layout: page
 title: About
 ---
+![IMG_9217](/Users/jeonmijin/Documents/gitPage/youth27.github.io/temp/IMG_9217.JPG)
 
 <p class="message">
   Hey there! This page is included as an example. Feel free to customize it for your own use upon downloading. Carry on!
