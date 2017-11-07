@@ -94,7 +94,7 @@ chocoMilk는 heap / milk는 stack - milk는 chocoMilk를 향해 화살표가 생
 
 #### identity / equality
 
-![identityEquality](/temp/identityEquality)
+![identityEquality](/temp/identityEquality.png)
 
 myPen과 yourPen은 같은 클래스에서 만들어졌지만 다른 인스턴스
 
