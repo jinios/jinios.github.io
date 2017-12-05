@@ -1,7 +1,7 @@
 ---
 layout: post
-title: guard의 효용 - early exit!
-tags: guard swift
+title: guard의 효용 - early exit! / 옵셔널바인딩
+tags: guard swift optional
 categories: Swift
 ---
 
@@ -11,18 +11,20 @@ categories: Swift
 
 **guard는 else문에서 빠져나가는 동작을 할때 효용이 있다.**
 
-guard를 쓰던 곳에서 원래 하던 return을 안하니 (= 함수를 빠져나가버리질 않으니) 에러가 났다. 알아보니 else문에 return이 없어서 나는 에러였는데, 내 코드는 else에서 return을 해버리면 안되는 로직이었다. 
+guard를 쓰던 곳에서 원래 하던 return을 안하니 (= 함수를 빠져나가버리질 않으니) 에러가 났다. 알아보니 else문에 return이 없어서 나는 에러였는데, 내 코드는 else에서 return을 해버리면 안되는 로직이었다.
 
 - 만약 guard (혹은 guard - let)를 쓴다면 else문에서 함수를 빠져나가는 동작이 있을때만 효용이 있음 : guard 바로 뒤의 구문이 만족되지 않으면 그냥 함수를 종료시켜버리는 로직에만 효과가 있다는 뜻
-- else문에서 함수를나가지 않고 다음 구문을 실행하야 되는 로직의 경우는 if (혹은 if- let)을 써야함 
+- else문에서 함수를나가지 않고 다음 구문을 실행하야 되는 로직의 경우는 if (혹은 if- let)을 써야함
+- early exit이라는 특성 때문에 옵셔널바인딩에서도 유용하게 쓰이는 것 같다.<br /> guard let을 사용한 옵셔널 바인딩은 <br /> `guard let afterValue = beforeValue else {return T}` <br /> 이런식으로 쓰이는데, 생각해보면 코드를 진행하기 위해 받는 input값이 nil이면 다음 로직이 실행될 수 없으니까 그대로 해당 메소드를 return으로 끝내버리는 것이 합리적이다. <br /> 이런 면에서 옵셔널 값을 언래핑했을때 값이 nil이면 early exit해버리는게 합리적이고 간편한 옵셔널바인딩이라고 할 수 있을 것 같다.
 
-예제 코드는 아래에!
+
+실수 했었던 예제 코드는 아래에!
 
 
 
 ##### <1>
 
-사다리 연습중에 if-else를 사용하는 대신 guard를 사용하라는 미션이 있어서 guard를 사용해보았다. 사용했던 함수는 사다리 중간의 randomBar를 만드는 동작에서 처음엔 String을 리턴하는 함수였다. 
+사다리 연습중에 if-else를 사용하는 대신 guard를 사용하라는 미션이 있어서 guard를 사용해보았다. 사용했던 함수는 사다리 중간의 randomBar를 만드는 동작에서 처음엔 String을 리턴하는 함수였다.
 
 ~~~swift
 //리턴값이 있던 전 함수. 에러가 없었음
@@ -57,4 +59,3 @@ mutating func makeRandomBar() -> String {
 'guard' body may not fall through, consider using a 'return' or 'throw' to exit the scope
 */
 ~~~
-
