@@ -53,9 +53,27 @@ extension ParsingTargetFactory {
 - `// FIXME:` 고쳐야 할 부분
 - 주석 예약어를 쓰면 Xcode의 Navigation dropdown서 주석 예약어대로 분리된 트리를 볼 수 있다. [참고했던 사이트](https://littlebitesofcocoa.com/207-annotating-swift-with-marks-todo-s-and-fixme-s)
 
+```Swift
+static func matchValues(_ target: (parseValue: [String], parseType: ParseTarget)) throws -> JSONData {
+    ...
+       return try [""].matchType([""])
+    }
+
+    // MARK: Private functions to make object
+
+    static func newTargetObject(_ pairsOfValue: [String]) -> [String:String] {
+      ...
+        return stringDictionaryToObject
+    }
+```
+
 
 ### protocol 활용
 #### Before Code Review
+- convertValues() : if를 써서 Array인지 Object인지 구분하고있었다.
+- MyArray와 MyObject를 묶는 용도로 ParsingTarget을 만들고 프로토콜에 아무 내용도 없었다...
+
+
 ```Swift
 let inputView = InputView()
 let userInput = inputView.askUserInput()
@@ -82,15 +100,18 @@ TypeConductor는 사용자가 입력한 문자열을 받아서 제일 외부에 
 ParsingTargetFactory가 각 객체의 기준에 따라서 형변환이 필요한 value들만 분리하는 작업을 하는것이고, JSONDataFactory는 그 이후에 분리된 value들을 가지고 JSONDataType으로 변환해서 입력한 객체형태(Array, Object)로 데이터를 저장하는 작업을 합니다.<br/>
 *(위에서 언급된 value들은 형변환이 필요한 String들을 [String]로 담은 것이며, ParsingTargetFactory에서 [String]을 만들기위한 분리 작업과 append작업을 한다.)*
 
-- JK : 그렇군요. 이해됐습니다. TypeConductor 객체는 단지 메소드가 하나만 있고 역할이 너무 단순해서 ParsingTargetFactory 메소드 하나만 떨어져 나간 것 같아 보입니다. 굳이 괄호에 따라 구분된 데이터 구조를 전달하기 보다는 내부 메소드로 만들어서 처리하는게 편리하지 않았을까 싶었습니다. main에 있는 호스트 코드가 복잡해지기보다 더 단순화하는 인터페이스 구조가 좋을 것 같습니다. 어떻게 생각하세요?
+- JK : 그렇군요. 이해됐습니다. TypeConductor 객체는 단지 메소드가 하나만 있고 역할이 너무 단순해서 ParsingTargetFactory 메소드 하나만 떨어져 나간 것 같아 보입니다. 굳이 괄호에 따라 구분된 데이터 구조를 전달하기 보다는 내부 메소드로 만들어서 처리하는게 편리하지 않았을까 싶었습니다. **main에 있는 호스트 코드가 복잡해지기보다 더 단순화하는 인터페이스 구조가 좋을 것 같습니다.** 어떻게 생각하세요?
 
 - 나 : 저도 흐름 상 ParsingTargetFactory에 conductor 기능을 하는 메소드가 있는게 맞다고 생각합니다. 객체 이름도 그렇고요!
 그런데 처음에 이렇게 나눈 이유가 ParsingTargetFactory 코드가 너무 긴 것 아닌가 해서 살펴보니 value를 나누는 일 말고 다른 성격의 일을 하는게 타입을 결정하는 일이었습니다. 이 문제때문에 Conductor를 따로 분리했습니다. 이 정도는 한 객체가 가지는 일이 맞는건가요? *(객체는 되도록 한 가지 일만 해야한다는 원칙에 따라 분리했는데, 기능을 또 합쳐도 되는건지 확신이 없었다.)*
 그리고 인터페이스구조는 어떤뜻인가요?
 
-- JK : 인터페이스라고 하면 메소드들을 의미한다고 생각하면 되고, 인터페이스 동작 구조는 우선 어떤 메소드를 호출하고 다음 어떤 메소드를 호출해야 하는지 동작 흐름을 의미합니다. 어떤 메소드를 호출하고 나서 이어서 꼭 다른 메소드를 호출해야만 한다면 메소드끼리도 의존성이 높아집니다. 그 관계를 단순화할 수 있는게 더 좋은 구조입니다. <br/> *(지금은 **"프로토콜로 대상을 묶어서 그 프로토콜에만 의존하여 동작하도록 수정하고, main도 객체도 단순화 하라는 코멘트!"** 라고 이해하지만, 당시에는 어떻게 해야할 지 몰라 좀 헤맸다.)*
+- JK : 인터페이스라고 하면 메소드들을 의미한다고 생각하면 되고, 인터페이스 동작 구조는 우선 어떤 메소드를 호출하고 다음 어떤 메소드를 호출해야 하는지 동작 흐름을 의미합니다. **어떤 메소드를 호출하고 나서 이어서 꼭 다른 메소드를 호출해야만 한다면 메소드끼리도 의존성이 높아집니다.** 그 관계를 단순화할 수 있는게 더 좋은 구조입니다. <br/> *(지금은 **"프로토콜로 대상을 묶어서 그 프로토콜에만 의존하여 동작하도록 수정하고, main도 객체도 단순화 하라는 코멘트!"** 라고 이해하지만, 당시에는 어떻게 해야할 지 몰라 좀 헤맸다.)*
 
 
 ### After Code Review
-TypeConductor를 제거하고 그 책임을 ParseTargetFactory로 넘겼습니다. (decideInputType()함수) 그리고 Factory 의미대로 ParseTargetFactory에서 ParseTarget메소드들을 생성하도록 수정했습니다.
-ParseTarget 프로토콜에 추상화 할 수 있는 함수들을 추가했습니다.
+TypeConductor를 제거. 책임을 ParseTargetFactory로 넘김. (decideInputType()함수)<br/> Factory 의미대로 ParseTargetFactory에서 ParseTarget메소드들을 생성하도록 수정.<br/>
+ParseTarget 프로토콜에 추상화 할 수 있는 함수들을 추가.<br/>
+JSONDataFactory : 위에 지적해주신 switch-case구문을 제거하기 위해 Array와 Dictionary를 ConvertTarget 프로토콜로 추상화하고, convertValues() 함수를 제거했습니다.<br/>
+-> converValues() 대신에, ConvertTarget을 makeConvertedData()를 선언하여 convertedArray나 convertedObject를 호출하는 메소드를 구현했습니다.<br/>
+-> makeConvertedData()함수 내에서만 호출하도록 변경된 함수들 또한 접근제어자를 private으로 변경했습니다.<br/>
