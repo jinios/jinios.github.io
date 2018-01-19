@@ -1,116 +1,199 @@
-# CardGame step4
+# CardGame_Step4_Feedback
+### 프로그래밍 요구사항
+- 포커 딜러 선택을 위한 새로운 입력 메뉴를 만든다.
+  - 게임은 7카드스터드 방식과 5카드스터드를 지원하며 메뉴로 선택한다.
+- 참여자는 딜러를 제외하고 1명에서 4명까지 참여할 수 있다.
+- 카드게임 종류와 참여자 수를 입력받는 GameInputView 구조체를 구현한다.
+- 카드가 남은 경우는 계속해서 게임을 진행하고, 카드가 부족할 경우 종료한다.
 
-### play()에서의 흐름제어
-현재는 play()를 실행하기 전 단계에서 if문으로 cardDeck.count()를 GameController의 hasEnoughCard()에 넘겨주면서 판단.
-play()에 controller 자체를 넘기는 방법으로 수정? -> play(controller: GameController) 이렇게!
+### 구현사항
+- Player와 Dealer 구조체 생성, 상속
+- ResultData구조체 생성
 
-cardDeck.count()를 가져와서 확인하는 것을 줄이는 방법으로, main의 play()함수에 파라미터로 controller자체를 넘겨주고 play() 내부에서 카드스택을 만들기 전에 확인하고 카드 수가 충분하면(hasEnoughCard()에서 true를 리턴받으면) 나머지 게임 로직이 실행되도록 감싸고싶었는데, 이렇게 함수 내부에서 로직을 실행하고 흐름제어를 상위모듈에서 가져오게 하는 방법은 어떻게 해야할지? play()의 리턴타입을 어떻게 해야하는지? throws키워드를 이럴 때 사용해야하는지?!
-
-### outputView description
-outputView호출 할때 description이 아니라 객체 자체를 넘길 수 있도록 outputView의 showResult()내부를 `파라미터.description`으로 변경
-
-### init throws 사용
-[init?과 init throws중에 어떤걸 써야하는지에 관한 글](https://owensd.io/2015/07/07/init-vs-init-throws/)
-- GameController객체 만들면서 객체 자체가 게임 진행여부 판단의 주체?가 될수 있게 하기위해 init?을 사용.
-
-         init?(stud: GameInputView.CardStudMenu,
-              numberOfPlayer: Int?) {
-            // setting stud
-            switch stud {
-            case .one:
-                self.studType = 7
-            case .two:
-                self.studType = 5
-            case .quitGame:
-                return nil // 게임 종료 메시지
-            case .wrongInput:
-                return nil // 잘못된 값 입력 메시지
-            }
-            // setting numberOfPlayer
-            guard let number = numberOfPlayer else {
-                return nil
-            }
-            if number >= 0 && number <= 4 {
-                self.numberOfPlayer = number
-            } else {
-                return nil
-            }
-
-        }
-
-- 이렇게 하면 상위모듈에서 컨트롤러 객체가 만들어졌을때 / nil일때로 단편적으로만 구분해서, nil인데 어떤 case여서 nil인지 구분이 되지 않는다. 그냥 다 똑같은 문구가 출력되면서 게임이 종료되게되는데, exception상황을 더 상세하게 구분짓기위해서 init에 throws키워드를 넣고 에러처리를 해야하는지!?
-- 이렇게 되면 main에서 옵셔널 바인딩 하는 과정에서 어떻게 처리해야할지 모르겠다 ㅠ
-  main.swift코드
-      let unconfirmedController = GameController(stud: stud, numberOfPlayer: inputNumber)
-
-              guard let controller = unconfirmedController else {
-                  runProgram = false
-                  // 게임 종료 메시지 출력 - 여기서 어떤 케이스여도 어떤 종료조건인지 체크가 되지 않음
-                  outputView.showResult(text:
-                      OutputView.ProgramDescription.quitGame)
-                  break
-              } // 게임 진행
+### 수정사항
+- main의 코드 줄임 : GameController추가
+- OutputView의 showResult()인자에 description제거
+- GameController의 init() throws로 수정
+- enum의 rawValue와 Associated Value같이쓰기?(미션에 적용은 안했지만 새로 알게된 것)
+- 에러수정 - Range error
 
 
-### init? 사용
-> GameController객체 만들면서 객체 자체가 게임 진행여부 판단의 주체?가 될수 있게 하기위해 init?을 사용.
+### 구현사항 \#1 : Player와 Dealer 구조체 생성, 상속
+Dealer와 Player의 속성이 동일하고, Dealer가 더 추가적으로 하는 동작이 많아서 Player를 상속하는 식으로 구현했다. (Player <- Dealer) <br/>
+딜러는 플레이어의 속성인 stack을 가질 수 있으며, 딜러의 stack은 `Dealer().stack`으로 사용 할 수 있다.
 
-```Swift
-    struct GameController {
-        private (set) var studType: Int
-        private (set) var numberOfPlayer: Int
-        let inputView = GameInputView()
+```swift
+// Player.swift
 
-        /*
-         상위 모듈에서 GameController객체가 nil이 되면
-         게임 진행이 되지 않도록 init? 설정
-         */
+class Player: CustomStringConvertible {
+    private(set) var stack: CardStack
+    private var position: Int?
 
-        init?(stud: GameInputView.CardStudMenu,
-              numberOfPlayer: Int?) {
-            // setting stud
-            switch stud {
-            case .one:
-                self.studType = 7
-            case .two:
-                self.studType = 5
-            case .quitGame:
-                return nil // 게임 종료 메시지
-            case .wrongInput:
-                return nil // 잘못된 값 입력 메시지
-            }
+    var description: String {
+        return "참가자#\(position!) " + stack.description
+    }
 
-            // setting numberOfPlayer
-            guard let number = numberOfPlayer else {
-                return nil
-            }
-            if number >= 0 && number <= 4 {
-                self.numberOfPlayer = number
-            } else {
-                return nil
-            }
+    init(stack: CardStack, position: Int?) {
+        self.stack = stack
+        self.position = position
+    }
+}
 
-        }
+// Dealer.swift
 
+class Dealer: Player {
+    override var description: String {
+        return "딜러 " + stack.description
+    }
 
-    // main.swift
-      let unconfirmedController = GameController(stud: stud, numberOfPlayer: inputNumber)
+    init(stack: CardStack) {
+        super.init(stack: stack, position: nil)
+    }
 
-            guard let controller = unconfirmedController else {
-                runProgram = false
-                // 게임 종료 메시지 출력
-                outputView.showResult(text:
-                    OutputView.ProgramDescription.quitGame)
-                break
-            } // 게임 진행
-
+}
 ```
 
 
 
+### 수정사항 \#1 : main의 코드 줄이기, GameController추가
+#### init?() / init() throws
+> 로직을 확장하고 필요한 순서대로 main에서 다 호출하다보니까 main이 엄청 길어졌다.
+> main의 로직을 controller객체가 담당하고 main에서는 컨트롤러만 만들어서 게임을 진행하도록 수정했는데, 이 과정에서 `init?()`과 `init() throws`를 사용해봤다.
 
-### enum 에 rawValue와 Associated Value
-enum에 rawValue와 Associated Value를 같이 쓸 수 없을까해서
+
+#### init?
+
+초반의 컨트롤러의 초기화는 아래와 같이 `init?`을 사용했다. <br/> main에서 컨트롤러 객체를 만들고 컨트롤러 내에서 입력한 studType과 player 수로 게임진행을 할지말지 결정하는게 아니라, **유효하지 않은 studType이나 룰에 어긋나는 player수가 입력되면 아예 컨트롤러 객체가 만들어지지도 않도록** 설계했다.<br/> (게임을 진행할 수 없는 무효한 값인데 컨트롤러를 만들어서 또 그 안에서 값을 판단하는게 효율적이지 않은 일이라고 생각했다.)
+
+```Swift
+// GameController.swift
+
+  struct GameController {
+    private (set) var studType: Int
+    private (set) var numberOfPlayer: Int
+
+        init?(stud: GameInputView.CardStudMenu,
+              numberOfPlayer: Int?) {
+            switch stud {
+            case .one:
+                self.studType = 7
+            case .two:
+                self.studType = 5
+            case .quitGame:
+                return nil
+            case .wrongInput:
+                return nil
+            }
+            guard let number = numberOfPlayer else {
+                return nil
+            }
+            if number >= 0 && number <= 4 {
+                self.numberOfPlayer = number
+            } else {
+                return nil
+            }
+
+        }
+  }
+
+// main.swift
+
+...
+
+let unconfirmedController = GameController(stud: stud, numberOfPlayer: inputNumber)
+       guard let controller = unconfirmedController else {
+           runProgram = false
+           // unconfirmedController가 nil이면 게임 종료
+           break
+       } // unconfirmedController가 nil이 아니면 게임 진행
+
+      ...
+```
+
+
+#### init() throws
+`init?`의 문제점 : 이렇게 하면 상위모듈에서 컨트롤러 객체가 '만들어졌을때 / nil일때'로 단편적으로만 구분돼서, nil인데 어떤 case여서 nil인지 구분이 되지 않는다. <br/>
+<U>유저의 입장에서 어떤 조건때문에 게임이 중단된건지 알아야하기때문에,</U> exception상황을 더 상세하게 구분짓기위해서 init에 throws키워드를 넣고 에러처리를 하기로했다.
+[init?과 init throws중에 어떤걸 써야하는지에 관한 글](https://owensd.io/2015/07/07/init-vs-init-throws/)
+
+```Swift
+
+// GameController.swift
+
+struct GameController {
+    private (set) var studType: Int
+    private (set) var numberOfPlayer: Int
+
+  init(stud: GameInputView.CardStudMenu,
+         numberOfPlayer: Int?) throws {
+        switch stud {
+        case .one:
+            self.studType = 7
+        case .two:
+            self.studType = 5
+        case .quitGame:
+            throw InitError.quit // 게임 종료 메시지
+        case .wrongInput:
+            throw InitError.wrongMenu // 잘못된 값 입력 메시지
+        }
+
+        guard let number = numberOfPlayer else {
+            throw InitError.wrongPlayerNumber // 숫자가 없음
+        }
+        if number >= 0 && number <= 4 {
+            self.numberOfPlayer = number
+        } else {
+            throw InitError.wrongPlayerNumber // 플레이어 수 오류
+        }
+    }
+}
+
+// main.swift
+
+func run() {
+    let gameInput = GameInputView()
+    let userInputStud = gameInput.askGameType(message:
+        OutputView.ProgramDescription.chooseCardStud)
+    let stud = gameInput.select(menu: userInputStud) // stud - userInput enum
+
+    guard stud != .quitGame else {
+        // 게임 종료
+        return
+    }
+    let inputNumber = gameInput.askNumberOfPlayer(message:
+        OutputView.ProgramDescription.askNumberOfPlayer) // numberOfPlayer
+    do {
+        let controller = try GameController(stud: stud,
+                                            numberOfPlayer: inputNumber)
+        // 게임 진행
+    } catch let error as GameController.InitError {
+        // 어떤 exception인지 catch
+        switch error {
+        case .quit: OutputView().showResult(text:error)
+            break
+        case .wrongMenu: OutputView().showResult(text:error)
+        case .wrongPlayerNumber: OutputView().showResult(text:error)
+        }
+    } catch {
+        print("unknown error")
+    }
+}
+
+```
+
+
+### 수정사항 \#2 : outputView description
+OutputView의 showResult()를 통해 내용을 출력 할때 description(속성 값)이 아니라 객체 자체를 넘길 수 있도록 OutputView의 `showResult(이름: 파라미터)`의 함수 내부를 `파라미터.description`으로 변경
+```Swift
+func showResult(text: CustomStringConvertible) {
+        print(text.description)
+    }
+```
+
+
+
+### 수정사항 \#3 : enum 에 rawValue와 Associated Value
+enum에 rawValue와 Associated Value를 같이 쓸 수 없을까해서 아래처럼 썼더니 에러 발생.
 ```swift
 enum CardStudMenu: String {
         case one(Int) = "1"
@@ -118,12 +201,12 @@ enum CardStudMenu: String {
         case quitGame = "q"
         case wrongInput
     }
+// Enum with raw type cannot have cases with arguments
 ```
-이렇게 했더니 이런 에러가 남 : Enum with raw type cannot have cases with arguments
-스택오버플로우에서 찾아보니까 된다고 함
-https://stackoverflow.com/questions/24171814/can-associated-values-and-raw-values-coexist-in-swift-enumeration
+[스택오버플로우](https://stackoverflow.com/questions/24171814/can-associated-values-and-raw-values-coexist-in-swift-enumeration)에서 되는 방법을 찾았다.
+<br/>
+하지만 이런식으로 연관값으로 써보려고했는데 내 코드에서의 연관값은 이렇게 활용하는게 아닌거같아서 코드에는 쓰지 않았다. :-(
 
-하지만 이런식으로 연관값으로 써보려고했는데 연관값은 이렇게 활용하는게 아닌거같아서 안함 ㅠㅠㅠ
 ```swift
 enum CardStudMenu {
         case one(Int)
@@ -148,11 +231,15 @@ extension GameInputView.CardStudMenu: RawRepresentable {
 }
 ```
 
-### range error
-> 남은 카드 수 체크시
+### 수정사항 \#4 : range error
+> 남은 카드 수 체크 부분
 
-카드 부족 시 게임 종료 기준에 플레이어 수 만 입력할 게 아니라 딜러 수도 입력해야함!
-딜러 수를 체크하지 않고 플레이어 수만 체크하니까 만약 카드 9장이 남아있을때 5카드스터드, 플레이어 수 1을 선택하니까 게임이 진행 됐는데 카드부족 메시지가 뜨면서 종료되는게 아니라 강제 종료돼버림. 원인은 5*1 < 9 조건만 체크하고 넘어갔다가, 딜러의 카드스택을 만들려다 보니 4장밖에없어서 카드 수가 부족했던 것!
+***카드 부족 시 게임 종료 기준에 플레이어 수 만 입력할 게 아니라 딜러 수도 입력해야함!*** <br/>
+Deck에 남아있는 카드 수와 다음 판을 하기위해 필요한 카드 수를 계산할때 `cardDeck.hasEnoughCards(numberOfNeeded: self.studType * self.numberOfPlayer)`처럼 딜러 수를 체크하지 않고 플레이어 수만 체크했더니 만약 카드 9장이 남아있을때 5카드스터드, 플레이어 수 1을 선택하니까 게임이 진행 됐는데, 카드부족 메시지가 뜨면서 종료되는게 아니라 디버그모드가 뜨면서 강제 종료돼버림! <br/>
+원인은 5*1 < 9 조건만 체크하고 넘어갔다가, 딜러의 카드스택을 만들려다 보니 4장밖에없어서 카드 수가 부족했던 것!
+- 해결 : 남아있는 카드 비교 함수에 넘기는 인자에 딜러 수까지 포함에서 넘김
+  - `cardDeck.hasEnoughCards(numberOfNeeded: self.studType * (self.numberOfPlayer+1))`
+
 ```
 <콘솔 화면>
 총 12장의 카드가 남아있습니다.
