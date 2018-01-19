@@ -9,8 +9,8 @@ cardDeck.count()를 가져와서 확인하는 것을 줄이는 방법으로, mai
 ### outputView description
 outputView호출 할때 description이 아니라 객체 자체를 넘길 수 있도록 outputView의 showResult()내부를 `파라미터.description`으로 변경
 
-### init throws
-
+### init throws 사용
+[init?과 init throws중에 어떤걸 써야하는지에 관한 글](https://owensd.io/2015/07/07/init-vs-init-throws/)
 - GameController객체 만들면서 객체 자체가 게임 진행여부 판단의 주체?가 될수 있게 하기위해 init?을 사용.
 
          init?(stud: GameInputView.CardStudMenu,
