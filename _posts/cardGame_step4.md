@@ -17,6 +17,7 @@
 - enum의 rawValue와 Associated Value같이쓰기?(미션에 적용은 안했지만 새로 알게된 것)
 - 에러수정 - Range error
 
+***
 
 ### 구현사항 \#1 : Player와 Dealer 구조체 생성, 상속
 Dealer와 Player의 속성이 동일하고, Dealer가 더 추가적으로 하는 동작이 많아서 Player를 상속하는 식으로 구현했다. (Player <- Dealer) <br/>
@@ -52,8 +53,39 @@ class Dealer: Player {
 
 }
 ```
+#### 알게 된 사실: 상속에서의 private 접근제어자
+스위프트에서는 자바의 `protected`와 같은 접근자가 없다. <br/>
+
+슈퍼클래스인 Player의 stack속성을 `private`으로 감추고싶었는데, `private`으로 설정하면 서브클래스인 Dealer가 해당 속성에 접근할 수 없다. <br/>
+(스위프트의 `private`는 '동일 파일 내에서만 접근이 허락되고 이 외에는 접근을 금지시킴' 이라는 의미로 사용된다.)<br/>
+[스위프트 블로그](https://developer.apple.com/swift/blog/?id=11)에서 찾아보니 `protected`는 아래와 같은 이유로 제공되지 않는다. <br/>
+스위프트의 접근제어자를 설계할 때 기본적으로 `private`과 `internal`의 기준으로 설계했다고 한다. <br/>
+(`internal`은 디폴트 엑세스레벨로, '해당 멤버나 클래스는 사용되는 프로젝트의 타겟에 소속된 곳이라면 어디서든 접근이 허락된다', '같은 모듈 내에서만 접근을 허용한다' 라는 의미.)  <br/>
+
+이와는 대조적으로 `protected`는 상속을 통해 완전히 새로운 제어 수준을 만들어낸다고 할 수 있다. 서브클래스라면 새로운 `public`메소드나 속성을 통해서 언제나 `protected`한 속성에 접근 할 수 있고, 오버라이드도 가능해서 꼭 보호가 된다고도 할 수 없지만, 또 상속관계가 아닌 다른 클래스는 접근을 제한한다. 스위프트는 이러한 `protected`의 특성을 'unnecessarily restrictive'라고 생각하는 것 같다. <br/>
+또한 `extensions`과 `protected`가 함께 사용될때 얼마나 clear하게 접근을 제한할 수 있는지도 불명확하다고 설명한다. 결과적으로 여러가지 이유로 스위프트는 `protected`를 제공하지 않는다.<br/>
+
+**대신에 `private(set)` 키워드를 사용해서 stack속성을 감추고 Dealer클래스에서도 접근할 수 있도록 수정했다.**
+
+```Swift
+class Player: CustomStringConvertible {
+    private(set) var stack: CardStack
+    private var position: Int?
+
+    var description: String {
+        return "참가자#\(position!) " + stack.description
+    }
+
+    init(stack: CardStack, position: Int?) {
+        self.stack = stack
+        self.position = position
+    }
+
+}
+```
 
 
+<br/> <br/>
 
 ### 수정사항 \#1 : main의 코드 줄이기, GameController추가
 #### init?() / init() throws
@@ -181,6 +213,7 @@ func run() {
 
 ```
 
+<br/>
 
 ### 수정사항 \#2 : outputView description
 OutputView의 showResult()를 통해 내용을 출력 할때 description(속성 값)이 아니라 객체 자체를 넘길 수 있도록 OutputView의 `showResult(이름: 파라미터)`의 함수 내부를 `파라미터.description`으로 변경
@@ -189,7 +222,7 @@ func showResult(text: CustomStringConvertible) {
         print(text.description)
     }
 ```
-
+<br/>
 
 
 ### 수정사항 \#3 : enum 에 rawValue와 Associated Value
@@ -230,6 +263,7 @@ extension GameInputView.CardStudMenu: RawRepresentable {
     }
 }
 ```
+<br/>
 
 ### 수정사항 \#4 : range error
 > 남은 카드 수 체크 부분
