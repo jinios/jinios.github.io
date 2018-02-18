@@ -10,8 +10,19 @@ title: Categories
     {% endfor %}
   </div>
   <div class="tags-expo-list">
-    {% for tag in site.nav.Categories %}
-    <a href="#{{ tag | slugify }}" class="post-tag">{{ tag }}</a>
+    {% for nav in site.nav %}
+      {% if nav[0] == 'Categories' %}
+        {% for i in (1..sub_len) %}
+          {% for sub_nav in nav[1][i] %}
+            {% assign sub_is_relative = sub_nav[1] | slice: 0 %}
+            {% assign sub_url = sub_nav[1] %}
+            {% if sub_is_relative == '/' %}
+              {% assign sub_url = sub_nav[1] | prepend: site.baseurl %}
+            {% endif %}
+              <a href="#{{ sub_nav[0] | slugify }}" class="post-tag">{{ sub_nav[0] }}</a>
+          {% endfor %}
+        {% endfor %}
+      {% endif %}
     {% endfor %}
   </div>
   <hr/>
