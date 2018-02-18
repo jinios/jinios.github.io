@@ -33,10 +33,10 @@ author:
     email: mayihelpu27@gmail.com
 # Navigation (2nd level links supported)
 nav:
-  Blog:
-    - '/'
-    - { Categories: '/blog/categories/' }
-    - { TIL: '/blog/categories/#TIL' }
+  Categories:
+    - '/blog/categories'
+    #- { Categories: '/blog/categories' }
+    - { TIL: '/blog/categories#TIL' }
     - { Swift: '/blog/categories/#Swift' }
     - { JAVA: '/blog/categories/#JAVA' }
     - { Codesquad: '/blog/categories/#Codesquad' }
