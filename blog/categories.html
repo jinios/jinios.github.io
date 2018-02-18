@@ -12,7 +12,7 @@ title: Categories
   <hr/>
   <div class="tags-expo-section">
     {% for nav in site.nav %}
-      <div>nav[0]</div>
+      <div>{{ nav[0] }}</div>
       {% if nav[0] == 'Categories' %}
         {% for i in (1..sub_len) %}
           {% for sub_nav in nav[1][i] %}
