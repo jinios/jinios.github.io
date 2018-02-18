@@ -36,7 +36,7 @@ nav:
   Categories:
     - '/blog/categories'
     #- { Categories: '/blog/categories' }
-    - { TIL: '/blog/categories#TIL' }
+    - { TIL: '/blog/categories/#TIL' }
     - { Swift: '/blog/categories/#Swift' }
     - { JAVA: '/blog/categories/#JAVA' }
     - { Codesquad: '/blog/categories/#Codesquad' }
