@@ -9,36 +9,31 @@ title: Categories
     <a href="#{{ tag[0] | slugify }}" class="post-tag">{{ tag[0] }}</a>
     {% endfor %}
   </div>
-  <div class="tags-expo-list">
+  <hr/>
+  <div class="tags-expo-section">
     {% for nav in site.nav %}
+      <div>nav[0]</div>
       {% if nav[0] == 'Categories' %}
         {% for i in (1..sub_len) %}
           {% for sub_nav in nav[1][i] %}
-            {% assign sub_is_relative = sub_nav[1] | slice: 0 %}
-            {% assign sub_url = sub_nav[1] %}
-            {% if sub_is_relative == '/' %}
-              {% assign sub_url = sub_nav[1] | prepend: site.baseurl %}
-            {% endif %}
-              <a href="#{{ sub_nav[0] | slugify }}" class="post-tag">{{ sub_nav[0] }}</a>
+            {% for tag in site.categories %}
+              {% if tag[0] == sub_nav[0] %}
+                <h2 id="{{ tag[0] }}">{{ tag[0] }}</h2>
+                <ul class="tags-expo-posts">
+                  {% for post in tag[1] %}
+                    <a class="post-title" href="{{ site.baseurl }}{{ post.url }}">
+                  <li>
+                    {{ post.title }}
+                  <small class="post-date">{{ post.date | date_to_string }}</small>
+                  </li>
+                  </a>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
           {% endfor %}
         {% endfor %}
       {% endif %}
-    {% endfor %}
-  </div>
-  <hr/>
-  <div class="tags-expo-section">
-    {% for tag in site.categories %}
-    <h2 id="{{ tag[0] }}">{{ tag[0] }}</h2>
-    <ul class="tags-expo-posts">
-      {% for post in tag[1] %}
-        <a class="post-title" href="{{ site.baseurl }}{{ post.url }}">
-      <li>
-        {{ post.title }}
-      <small class="post-date">{{ post.date | date_to_string }}</small>
-      </li>
-      </a>
-      {% endfor %}
-    </ul>
     {% endfor %}
   </div>
 </div>
