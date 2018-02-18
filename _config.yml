@@ -43,8 +43,8 @@ nav:
     - { Study: '/blog/categories/#Study' }
     - { Story: '/blog/categories/#Story' }
     - { Tags: '/blog/tags/' }
-  About me:
-    - '/about/'
+  # About me:
+  #   - '/about/'
   Github Project:
     - 'https://github.com/youth27'
 
