@@ -36,6 +36,12 @@ nav:
   Blog:
     - '/'
     - { Categories: '/blog/categories/' }
+    - { TIL: '/blog/categories/#TIL' }
+    - { Swift: '/blog/categories/#Swift' }
+    - { JAVA: '/blog/categories/#JAVA' }
+    - { Codesquad: '/blog/categories/#Codesquad' }
+    - { Study: '/blog/categories/#Study' }
+    - { Story: '/blog/categories/#Story' }
     - { Tags: '/blog/tags/' }
   About me:
     - '/about/'
