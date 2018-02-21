@@ -11,6 +11,8 @@ categories: Study
  3. pivot보다 작은 숫자는 왼쪽 큰 숫자는 오른쪽으로, pivot양 옆으로 하위배열을 나눔
  4. pivot의 왼쪽 배열과 오른쪽 배열에 대해 반복적으로 수행
 ***
+
+
 <br/>
 
  - 평균적으로 빠른 알고리즘이지만 O(n log n)
@@ -32,6 +34,7 @@ categories: Study
 ## 예시 코드
 
 1. pivot이 배열의 첫번째 value가 되는 경우 (최악의 경우)
+
 ```Swift
 func quickSort(_ arr: [Int]) -> [Int] {
     let pivot = arr[0]
@@ -59,12 +62,13 @@ func quickSort(_ arr: [Int]) -> [Int] {
 
 quickSort([5,3,4,9,10])
 ```
+
 <br/>
 <br/>
 
 2. pivot이 배열의 중간위치에 있는 value인 경우(평균적인 경우)
 
-```swift
+```Swift
 func quick(_ a: [Int]) -> [Int] {
     guard a.count > 2 else { return a }
 
