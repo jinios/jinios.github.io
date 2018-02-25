@@ -1,21 +1,23 @@
 .post {
-  margin-bottom: 4em;
+  margin: 0 1em 4em 1em;
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
   }
 
   @media (min-width: 38rem) {
-    font-size: .8rem;
+    font-size: .87rem;
 
-    h1 { font-size: 1.6rem; }
-    h2 { 
+    h1 {
+      //font-size: 1.8rem;
+    }
+    h2 {
       margin: 2em 0 1em 0;
-      font-size: 1.0rem; 
+      font-size: 1.65rem;
     }
     h3, h4, h5, h6 {
-      margin: 2em 0 1em 0;
-      font-size: 0.8rem;
+      margin: 2em 0 0.5em 0;
+      // font-size: 0.8rem;
     }
   }
 
@@ -68,4 +70,3 @@
 .related-posts li a:hover small {
   color: inherit;
 }
-
