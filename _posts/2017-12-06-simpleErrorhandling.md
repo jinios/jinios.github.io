@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 에러핸들링 : throw ~ do-try-catch
+title: 에러핸들링 throw ~ do-try-catch
 tags: error throw do-try-catch errorhandling
 categories: Swift
 ---
