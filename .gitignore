@@ -43,3 +43,6 @@ bower_components
 
 # sass
 .sass-cache
+
+# Posts to ignore
+_posts/temp
