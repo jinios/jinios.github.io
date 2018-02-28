@@ -1,9 +1,9 @@
 # Site Info
-title: Youth27
+title: JINiOS
 # tagline: '공부기록'
 description: 'A Jekyll theme adapted from <a href="http://lanyon.getpoole.com/" target="_blank">Lanyon</a>. Made by <a href="http://codinfox.github.io" target="_blank">@codinfox</a>.'
 baseurl: ""
-url: https://youth27.github.io
+url: https://jinios.github.io
 logo: '/public/logo.png'
 
 # Site configurations
@@ -24,11 +24,11 @@ version: 1.0.0
 
 # About/contact
 author:
-  name: Youth
-  description: <strong>YOUTH</strong> <br> ✨🦄 explore iOS & Swift 💫
+  name: JINiOS
+  description: <strong>JIN+iOS</strong> <br> ✨🦄 explore iOS & Swift 💫
   gravatar: # md5 hash of your email address
   contact:
-    github: https://github.com/youth27
+    github: https://github.com/jinios
     # facebook:
     email: mayihelpu27@gmail.com
 # Navigation (2nd level links supported)
@@ -46,7 +46,7 @@ nav:
   # About me:
   #   - '/about/'
   Github Project:
-    - 'https://github.com/youth27'
+    - 'https://github.com/jinios'
 
 # Where are tags and categories displayed
 tag_page: '/blog/tags/'
@@ -59,4 +59,4 @@ hero:
 # Puglins
 mathjax: true # whether support mathjax
 google_analytics_token: 'UA-00000000-1' # leave blank if you don't want google analytics
-disqus_short_name: 'youth27' # leave blank if you don't want disqus
+disqus_short_name: 'Mijin Jeon' # leave blank if you don't want disqus
