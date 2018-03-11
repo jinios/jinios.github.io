@@ -29,13 +29,18 @@ class FirstViewController: UIViewController {
 
 #### Custom Color Literal사용하기
 
-1. 먼저 변수를 선언하고, `Color Literal`이라고 써준다. xcode는 아래와 같이 드롭다운으로 `Color Literal`을 보여준다.
-![xcode_color_literal](/_posts/images/colorLiteral_20180311.png)
-2. `Color Literal`을 선택하면 컬러를 선택할 수 있는 창이 뜨고, others 버튼을 클릭해서 직접 색상과 투명도를 선택하고 변수 선언을 완료한다.
-![xcode_color_literal2](/_posts/images/colorLiteral2_20180311.png)
-3. 선언된 변수는 아래와 같이 사용한다.
-  ```swift
-  @IBOutlet weak var firstDescription: UILabel!
+-  먼저 변수를 선언하고, `Color Literal`이라고 써준다. xcode는 아래와 같이 드롭다운으로 `Color Literal`을 보여준다.
+<br/>
+
+![xcode_color_literal](/assets/img/post_img/colorLiteral_20180311.png)
+-  `Color Literal`을 선택하면 컬러를 선택할 수 있는 창이 뜨고, others 버튼을 클릭해서 직접 색상과 투명도를 선택하고 변수 선언을 완료한다.
+<br/>
+
+![xcode_color_literal2](/assets/img/post_img/colorLiteral2_20180311.png)
+-  선언된 변수는 아래와 같이 사용한다.
+
+```swift
+@IBOutlet weak var firstDescription: UILabel!
 
 override func viewDidLoad() {
     super.viewDidLoad()
@@ -43,7 +48,10 @@ override func viewDidLoad() {
     let colorLiteral = #colorLiteral(red: 0.1380051349, green: 0.3703911386, blue: 1, alpha: 0.7430436644)
     self.firstDescription.textColor = colorLiteral
   }
-    // colorLiteral변수가 코드블럭으로 붙여넣으면서 rgb값이 숫자로 나왔음
-  ```
-  실제로는 `colorLiteral`변수는 이렇게 보여지게된다.
-  ![xcode_color_literal3](/_posts/images/colorLiteral3_20180311.png)
+  // colorLiteral변수가 코드블럭으로 붙여넣으면서 rgb값이 숫자로 나왔음
+```
+
+  실제로는 `colorLiteral`변수는 코드에 설정된 색깔과 함께 보여지게된다.
+<br/>
+
+  ![xcode_color_literal3](/assets/img/post_img/colorLiteral3_20180311.png)
