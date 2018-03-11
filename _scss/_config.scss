@@ -10,17 +10,20 @@ $blue:     #6a9fb5;
 $magenta:  #aa759f;
 $brown:    #8f5536;
 $default:  #505050;
+$pink:     #FFB2AF;
+$grey:     #8c8c8c;
 
 $white:      #fff;
 $lightgrey:  #eee;
 $black:      #000;
+$silver:     #silver;
 
 $theme-color: $blue;
 $theme-color-dark: darken($theme-color, 10%);
 
 $post-date-color: #9a9a9a;
 $title-color: #313131;
-$masthead-title-small-color: #c0c0c0;
+$masthead-title-small-color: $theme-color;
 
 /* Layout */
 $reverse-layout: true;
