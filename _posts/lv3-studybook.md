@@ -498,3 +498,156 @@ class Stock: NSObject, NSCoding {
 
     private var inventory = [ObjectIdentifier: [Beverage]]()
 ```
+
+## 싱글톤
+**JK's comment:** 위에서 sharedInstance로 만들었는데 아래 DataStorage에서 load해서 self.vending 만 바꾸면 **다른 곳에서 sharedInstance에 접근하면 안되지 않나요? 싱글톤 의미가 있나요?**
+- 다른 곳에서 접근 한다: 싱글톤패턴은 다른 곳에서 접근하여 값을 바꿀 수 없도록 하는 것이 목표인데, AppDelegate객체(외부)에서 `VendingMachine.sharedInstance = loadData`이런식으로 값을 직접 바꾸는것이 문제?
+- 클래스 메소드를 선언해서, 자판기 데이터를 load하고 save할때 싱글톤객체의 vendingMachine을 바꿔주는 동작을 구현한다.
+- 하지만 static이라는뜻은 전역변수, 모든 객체들이 그 변수 값을 바라볼 수 있게(?)만들어놓고 정작 접근할 수 없도록 해야한다는 뜻이란?ㅠㅠ
+- 전역변수 스스로 load된 자판기 데이터로 바꿔치기하는 것과 appDelegate객체에서 선언된 self.vending = sharedInstance의 self.vending을 바꿔치기하는 것의 정확한 차이
+
+### 싱글톤 적용하면서 이슈
+#### 문제상황
+- 싱글톤 객체를 만들어놓고 사용하지 않음
+- 싱글톤 객체를 앱델리게이트에서 사용하도록 수정했는데 앱 종료 후 다시 런칭했을때 초기화된 자판기 로드됨
+- **의심상황1** : AppDelegate의 변수 `vending`을 만들때 언아카이빙된 객체가 지정되는게 아니라 싱글톤 객체 초기화 `init()`함수에서 새롭게 초기화된(빈 자판기)객체가 지정된다.
+- **의심상황2** : 아카이빙이 제대로 되지 않는다. 아카이빙 할때 넘겨주는 vendingMachine데이터가 앱델리게이트의 `self.vending`으로, 의심상황1과 같이 싱글톤 객체 초기화 `init()`함수에서 새롭게 초기화된(빈 자판기)객체가 지정된다.
+***
+
+- **문제 원인1 :** `applicationWillTerminate()`에서 아카이빙할때 앱델리게이트의 `self.vending`을 저장하도록 넘김. static변수인 sharedInstance가 초기화되면서 초기값이 들어감
+- 언아카이빙 시에는 `self.vending = loadedData`으로 객체를 바꿔버리면서, viewController에서 언아카이빙된 자판기를 사용하긴 하지만 *싱글톤을 사용하게 되지 않는다...*  
+```swift
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
+    let vending = VendingMachine.sharedInstance
+
+    // 언아카이빙
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        guard let loadedData = DataStorage().loadVendingMachine() else {
+            return true // 로드될 자판기가 없으면 초기화된 sharedInstance로 vending 세팅
+        }
+        self.vending = loadedData
+        return true
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+       DataStorage().saveVendingMachine(data: self.vending)
+    }
+
+// DataStorage.swift - 아카이빙과 언아카이빙 메소드 참고
+class DataStorage {
+
+    func loadVendingMachine() -> VendingMachine? {
+        // 존재확인
+        if UserDefaults.standard.object(forKey: "vendingMachine") != nil {
+            // key값으로 데이터 가져옴
+            let encodedVending = UserDefaults.standard.data(forKey: "vendingMachine")
+            guard let archivedMachine = NSKeyedUnarchiver.unarchiveObject(with: encodedVending!) as? VendingMachine else { return nil }
+            return archivedMachine
+        }
+        return nil
+    }
+
+    func saveVendingMachine(data: VendingMachine) {
+        UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: data), forKey: "vendingMachine")
+    }
+}
+
+```
+***
+- **문제 원인1 추가:** AppDelegate에서 `let vending = VendingMachine.sharedInstance`로 접근하면 아래 코드에서 `static var sharedInstance = VendingMachine()`여기로 접근
+  - `VendingMachine()`부분 때문에 모든 재고를 한 개씩 추가하는 init()이 실행되면서 싱글톤 객체의 자판기는 빈 자판기가 돼버림. 따라서 아래의 타입메소드를 추가했다.
+
+- 싱글톤객체의 `init()`은 빈 자판기(음료수 재고가 하나씩 있는 초기 형태)생성
+- `sharedVendingMachine()`: 현재 시점의 싱글톤객체 상태 그대로를 리턴함
+  - (싱글톤객체를 호출하면서 빈 자판기로 초기화되는 문제 방지)
+- `loadData()`: 싱글톤객체 생성 후 싱글톤 객체의 상태를 변경해주고싶을때 원하는 상태의 VendingMachine을 파라미터로 넘겨주면 싱글톤객체 상태를 바꿔준다. 대신에 외부에 접근해서 값을 바꾸지 않고 타입메서드를 통해서만 바꾸기 위해서 만듦.
+
+```swift
+class VendingMachine: NSObject, NSCoding {
+    static var sharedInstance = VendingMachine()
+
+    private override convenience init() {
+        self.init(stockItems: Controller().setVendingMachineStock(unit: 1))
+    }
+
+    class func sharedVendingMachine() -> VendingMachine {
+        return sharedInstance
+    }
+
+    class func loadData(_ data: VendingMachine) {
+        sharedInstance = data
+    }
+```
+
+***
+
+- **문제 원인 2:** viewDidLoad에서 appDelegate의 `vending`을 불러오면서, AppDelegate의 `vending`변수에 접근하게되고 새로운 빈 `vending`인스턴스가 만들어짐
+```swift
+// ViewController.swift
+override func viewDidLoad() {
+    super.viewDidLoad()
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    vending = appDelegate.vending
+    self.updateItemNumber()
+    self.setBalance()
+}
+```
+***
+
+- **정리 및 해결:**
+- **원인:** 싱글톤으로 만들어진 객체와 로드된 자판기객체가 따로 생성되고, 로드된 자판기 데이터가 싱글톤객체에 제대로 반영되지 않아서 생긴 문제였다.
+- 싱글톤패턴을 만들면서 선언했던 sharedInstance는 변수일뿐임.
+- AppDelegate의 `self.vending`: 처음에 선언하면서 빈 자판기 객체를 만들고 sharedInstance가 빈 자판기를 가리키고있었는데, loadData로 만들어진 새로운 자판기 객체를 만드는 것으로 참조 관계가 변경됨
+- 또한 아카이빙할때도 `self.vending`을 넣어줘서 바뀐 자판기가 저장되는 것이 아니라, self.vending이 처음 초기화된 sharedInstance(재고가 빈)자판기 데이터가 저장됐던 것이 문제. (이렇게 되면 저장된 자판기가 언아카이빙될때도 loadData가 빈 자판기가 됨)
+```swift
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
+    // vending 변수 제거
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        guard let loadedData = DataStorage().loadVendingMachine() else { return true } // 초기화된 sharedInstance로 vending 세팅
+        VendingMachine.loadData(loadedData)
+        // 로드된 vending 데이터를 싱글톤객체 sharedInstance에 대입
+        return true
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+    DataStorage().saveVendingMachine(data: VendingMachine.sharedVendingMachine())
+    // 현재 싱글톤의 상태 데이터를 (그대로)리턴받아서 저장
+}
+
+// ViewController에서도 현재 상태 데이터를 가진 싱글톤 객체를 바탕으로 동작
+override func viewDidLoad() {
+     super.viewDidLoad()
+     vending = VendingMachine.sharedVendingMachine()
+     self.updateItemNumber()
+     self.setBalance()
+ }
+
+```
+
+
+### DIP(Dependency Inversion Principle 의존성 역전 원리)
+- 사전적 정의: 의존관계를 갖는 모듈 인스턴스의 구성이 추상화에 의존한다.
+- High level modules should not depend on low-level modules. Both should depend on abstractions.
+- 의존관계가 있는 객체를 프로토콜을 선언하여 프로토콜에 의존하게 만드는 것
+- 전통적인 흐름: 상위모듈이 하위모듈 인스턴스를 직접 생성한다.
+  - 이렇게되면 **하위 모듈의 코드 형식이 상위모듈에 의해 결정되기때문에 하위모듈의 다형성이 동작하기 어렵ㄴ다. 또한 유닛테스트도 어렵다.**
+- DIP를 사용하게되면, **구체적인 의존관계가 추상화에 의해 결정되기때문에** 다형성과 재사용성이 높아짐
+
+- **cf. Dependency Injection: DIP를 구현하는 기법 중 하나.**
+
+### Observer 패턴
+[참고- 야곰의 블로그](http://blog.yagom.net/267)
+[참고- 얄미대디 블로그](https://jdub7138.blog.me/220937372865)
+- MVC구조에서, Model이 Controller에게 말을 걸기위해 사용하는 방식
+- NotificationCenter가 하는: 객체 A와 B 간 정보를 주고받을때, 사이에서 객체 간에 서로 누가 누군지는 알 수 없지만, 노티피케이션 이름마 알고있다면 노티피케이션 센터에다가 나 이런 노티를 날렸으니 너가 알아서 처리해! 라고 하는 명령, 그럼 그 노티피케이션 센터는 해당 노티를 기다리고 있는 객체에게 해당 명령 수행요청.
+- 옵저버 추가 메소드: `addObserver()`, `addObserverForName()`
+- 옵저버 제거 메소드: `removeObserver()`
+- notification 보내기(post): `postNotification()`
+
+
+- selector: 오브젝티브-C 추론을 위해 selector 함수 앞에 `@objc` 어노테이션이 필요. 셀렉터 메소드는 항상 하나의 유일한 NSNotification타입의 인스턴스를 인자로 받아야한다.
