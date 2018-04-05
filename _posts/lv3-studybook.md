@@ -651,3 +651,106 @@ override func viewDidLoad() {
 
 
 - selector: 오브젝티브-C 추론을 위해 selector 함수 앞에 `@objc` 어노테이션이 필요. 셀렉터 메소드는 항상 하나의 유일한 NSNotification타입의 인스턴스를 인자로 받아야한다.
+
+
+## UIView
+
+UIView의 생성자는 보통 건드리지않는게 좋지만..! 그래도 종류를 알아두고자 정리함. UIView는 두개의 필수 생성자가 있는데 바로 `init(coder: NSCoder)`이다.
+`init(coder: NSCoder)`: 스토리보드에서 나오면서 UIView를만들떄 만들어지는 생성자. 뷰를 스토리보드에서 드래그해서만들었는데, 만약 앱이 실행될때 스토리보드가 재구성되면 이 생성자가 호출되면서 UIView가 만들어짐.
+
+frame과 center
+- frame : 나의 뷰가 슈퍼뷰의 어디에 있나
+- center: 슈퍼뷰의 중간점
+- Use frame and center to position a UIView
+  - frame과 center는 뷰를 positioning해준다.
+
+drawRect를 직접 호출하면 안됨. drawRect는 시스템이 호출한다!
+뷰의 setNeedsDisplay()을 호출해서 뷰를 그려준다.
+setNeedsDisplay()메소드는 시스템에게 "이 뷰는 다시 그려질 필요가 있다"고 말하고, 뷰는 미래의 적절한 시점에 drawRect()메소드를 호출한다.
+뷰는 여러 복잡한 계층구조에 얽혀있고 성능문제도 있기때문에, 뷰 중에 어떤 것이 하나 바뀐다고 모든 뷰를 다시 다 그리는 것이 아니라, 하나가 바뀌면 모든게 바뀔때까지 기다렸다가 한번에 필요한 부분만 바뀐 뷰를 그려주는 방식으로 동작할 수 있게한다.
+
+`setNeedsDisplayInRect(regionThatNeedsToBeRedrawn: CGRect)`는 더 최적화된버전으로, 바꾸고싶은 영역을 지정해주면된다.
+
+#### 패턴매칭
+```swift
+func drawPoint (_ shape: MyShape) {
+        switch shape {
+        case let shape as MyPoint:
+            printByPoint(shape)
+        case let shape as MyLine:
+            printByLine(shape)
+        default:
+            print("")
+        }
+        print("두 점 사이의 거리는  \(shape.calculate())")
+    }
+```    
+
+
+### UIView
+> 미션 내에 UIImageview를 사용하고 설정하는 부분에서 궁금한게 있어서 정리.
+> [스탠포드iOS강의]()내용 참고
+
+#### UIView의 생성자
+(UIView의 생성자는 보통 건드리지않는게 좋지만..! 그래도 종류를 알아두고자 정리함.)
+- UIView는 두개의 필수 생성자가 있다. 바로 `init(frame: CGRect)`과 `init(coder: NSCoder)`이다.
+- `init(coder: NSCoder)`: 스토리보드에서 나오면서 UIView를만들때 만들어지는 생성자.
+  - 뷰를 스토리보드에서 드래그해서만들었는데, 만약 앱이 실행될때 스토리보드가 재구성되면 이 생성자가 호출되면서 UIView가 만들어짐.
+- `init(frame: CGRect)`: CGRect타입으로 프레임을 정해주고 UIView를 생성
+  ```swift
+  let rect = CGRect(x: 10, y: 10, width: 100, height: 100)
+  let myView = UIView(frame: rect)
+  ```
+  - [CGRect](https://developer.apple.com/documentation/coregraphics/cgrect): A structure that contains the location and dimensions of a rectangle.
+
+#### frame과 center
+> positioning a view.
+
+- frame : 나의 뷰가 슈퍼뷰의 어디에 있나
+- center: 슈퍼뷰의 중간점 (나의 뷰의 중간점이아님!)
+
+
+- Use frame and center to position a UIView!
+  - frame과 center는 뷰를 positioning하기위함이다. *뷰를 그리는 동작을 위해서 frame이나 center를 사용하지 않는다.*
+
+#### arc그리기
+[수학방](http://mathbang.net/497)
+[draw arc - raywenderlich](https://www.raywenderlich.com/162315/core-graphics-tutorial-part-1-getting-started)
+#### drawRect()- How to redraw a view?
+- 뷰의 `setNeedsDisplay()`을 호출해서 뷰를 그려준다. (`drawRect`를 직접 호출하면 안됨. `drawRect`는 시스템이 호출한다!)
+
+- `setNeedsDisplay()`메소드는 시스템에게 "이 뷰는 다시 그려질 필요가 있다"고 메시지를 보내고, 뷰는 미래의 적절한 시점에 `drawRect()`메소드를 호출한다.
+- 이렇게 동작하는 이유는, 뷰는 여러 복잡한 계층구조에 얽혀있고 성능문제도 있기때문에, 뷰 중에 어떤 것이 하나 바뀐다고 모든 뷰를 다시 다 그리는 것이 아니라, ***하나가 바뀌면 모든게 바뀔때까지 기다렸다가 한번에 필요한 부분만 바뀐 뷰를 그려주는 방식으로 동작*** 할 수 있게한다.
+
+- `setNeedsDisplayInRect(regionThatNeedsToBeRedrawn: CGRect)`는 더 최적화된버전으로, 해당 뷰 중에서 바꾸고싶은 영역을 지정해주면된다.
+
+스토리보드와 코드를 연결시켜서 스토리보드에서도 코드에 구현한 내용을 볼 수 있게 하기
+
+- bound를 draw메소드에서 클래스 속성으로 빼서 사용하려고했을때 "인스턴스 멤버인 bounds는 pieGraphView에서 사용할 수 없다"고 나옴
+- 이유: 초기화하는 동안 bound를 사용할 수 없음
+- 속성을 초기화하는동안은 클래스를 사용할 수 없다.
+- 초기화를 완전히 완료하기 전에는 쓸 수 없음. 따라서 계산 프로퍼티로 선언 할 수 있다.
+- 애플 공식문서에서 Declaration에서도 계산프로퍼티로 나와있다.
+  - `var bounds: CGRect { get set }`
+
+### reduce와 mapValue!
+```swift
+var endAngles: [Beverage: CGFloat]? {
+    let arrangedList = historyData?.reduce(into: [Beverage:Int]()) {
+        $0[$1, default: 0] += 1
+    }
+    let degrees = arrangedList?.mapValues({ CGFloat(CGFloat($0) / CGFloat((historyData?.count)!) * 360)
+    })
+
+    return degrees
+}
+
+```
+- `reduce()` :
+  - $0은 into: 키워드에 선언된 값을 가리킨다
+  - $1은 key값을 나타냄. 따라서 \$0[\$1]은 `dictionary[key] = value`라고 보면 된다.
+  - default는 value의 기본 값을 뜻하는 것일 뿐이고, `+=1`로 value에다가 1씩 더해주는 것을 뜻함
+
+- `mapValues(_:)` : Returns a new dictionary containing the keys of this dictionary with the values transformed by the given closure.  
+  - CGFloat($0): 딕셔너리의 밸류를 뜻함. 다른 고차함수와 마찬가지로 `\$0`으로 모든 딕셔너리의 밸류를 순회하면서 사용할수있다!
+  - 클로저 안에서 딕셔너리 밸류를 원하는대로 바꾸고 여전히 딕셔너리로 리턴받을 수 있음!
