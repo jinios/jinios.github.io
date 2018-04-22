@@ -62,11 +62,31 @@ required init?(coder aDecoder: NSCoder) {
 ```
 
 #### \+ 추가. awakeFromNib()
-- awakeFromNib()은 인터페이스 빌더에서 뷰가 만들어졌을때 호출된다고만 알고있었는데, 그보다 더 나아가
-- **인터페이스 파일이 로드되고 아울렛 커넥션이 만들어진 후에 호출된다** 고 한다.
-- 좀 더 상세히 말하자면,(awakeFromNib이 호출되는 경우)
-  - 클래스의 인스턴스 변수를 뷰로 선언한 후 인터페이스 빌더에서 연결한다.
-  - 이후 이러한 변수들에 대해 몇가지 초기 설정을 할 필요가 생기는데, `init()`메서드에서 하려고하면 변수들이 인스턴스화되지 않았기때문에 사용할 수 없다.
-  - 이와같이 인터페이스 빌더에서 만든 객체의 변수를 사용하려고 할 때 `awakeFromNib()`을 사용한다.
-  - xib파일에 아카이브 된 객체를 언아카이브하여 객체를 인스턴스화 한 후 이 메서드를 호출하기 때문이다.  
-- [참고링크 1](http://joejeon.tistory.com/702), [참고링크 2](https://stackoverflow.com/questions/9122344/when-does-awakefromnib-get-called?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa), [참고링크 3](http://jjun5050.tistory.com/12)
+> awakeFromNib()은 인터페이스 빌더에서 뷰가 만들어졌을때 호출된다고만 알고있었는데, 그보다 더 자세하게 알 필요가 있어서 추가
+
+#### awakeFromNib이 호출되는 시점
+> `awakeFromNib()`은 객체가 초기화(인스턴스화)된 후 호출된다.
+
+- UIView에서 상속받은 커스텀 View 클래스를 만들고 인터페이스빌더에 지정하면(오른쪽 탭 inspector에서 지정하는 방법으로) 커스텀 클래스는 아카이브되어 있다가 언아카이브됨(xib파일에)
+- 이 때 init(coder:)가 호출되고 내부 속성이 초기화됨
+- 일부는 이 때 의미없는 값으로 초기화되거나 IBOutlet을 비롯한 객체 참조 관계가 불명확할 수 있음
+  - init 시점에서는 frame과 관련된 크기, 위치 등 뷰가 완벽하게 만들어지지 않은 상태
+  - 이와같이 인터페이스 빌더에서 연결된 객체의 변수를 사용하려고 할때 `awakeFromNib()`을 사용함
+  - 이렇게 `awakeFromNib()`은 객체를 인스턴스화 한 후(`init()`이 호출된 후) 호출된다.
+- (IBOutlet이 없어도 `awakeFromNib()`은 호출됨)
+
+#### awakeFromNib()과 init()에서 모두 설정해야 하는 이유
+> `뷰를 만들고 커스텀뷰를 인터페이스빌더에서 연결했을땐 init(frame:), init(coder:)와 awakeFromNib()두 군데 모두에서 설정을 해준다`의 의미
+
+- 그래서 초기화가 끝나고 설정 awakeFromNib 시점에서 추가적인 작업이 필요한 경우 해야함.
+- 커스텀 뷰를 만드는 개발자 입장에서는 다른 개발자가 `init(frame:)`을 호출해서 코드로 생성할지, 인터페이스 빌더에서 지정해서 사용할지 불명확하니까 코드로 만들던 인터페이스빌더로 작업하던 둘 다 동일한 동작이 가능하도록 지정하는 게 좋음
+- JK의 코멘트 추가
+```
+경험상 init(coder:) 시점에는 frame 이나 Layer 관련없는 값들,
+awakeFromNib 시점에는 frame 이나 Layer 관련된 값들을 설정하도록 구현하면 됩니다.
+init(frame:) 은 이미 frame 정보가 있으니까 괜찮구요.
+물론 autoLayout 처리를 하는 경우는 awakeFromNib 보다 더 뒤에 해야합니다.
+```
+
+
+[참고링크 1](http://joejeon.tistory.com/702), [참고링크 2](https://stackoverflow.com/questions/9122344/when-does-awakefromnib-get-called?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa), [참고링크 3](http://jjun5050.tistory.com/12)
