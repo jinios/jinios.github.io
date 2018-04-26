@@ -736,7 +736,7 @@ func drawPoint (_ shape: MyShape) {
 ### reduce와 mapValue!
 ```swift
 var endAngles: [Beverage: CGFloat]? {
-    let arrangedList = historyData?.reduce(into: [Beverage:Int]()) {
+    let arrangedList = historyData?. (into: [Beverage:Int]()) {
         $0[$1, default: 0] += 1
     }
     let degrees = arrangedList?.mapValues({ CGFloat(CGFloat($0) / CGFloat((historyData?.count)!) * 360)

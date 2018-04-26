@@ -78,7 +78,6 @@ $ gcc -o sum sum.o main.o
 오버플로우연산자 - 오버플로우가 발생할수 있는 결과가 나올 연산에 써서 오버플로우 값이 결과로 나와도 프로그램이 종료되지 않게함
 
 #### custom operator
-
 precedencegroup: 컴파일러에게 주는 옵션같은 것
 associativity : left 왼쪽에 연관된 값에 기준해서 처리해라
 higherThan : 처리 중요도를 정해줌
@@ -86,6 +85,10 @@ higherThan : 처리 중요도를 정해줌
 오퍼레이터를 만들때 클로저로 매개변수로 넘기면서 다음에 나온 값을 또 다음에 나오는 함수에 넘어가는것이 자연스러워보이게끔! (선언적으로 보이게 해서 읽기도 쉬워짐)
 대신에 똑같은 오퍼레이터를 써서 계속 함수에 이전함수결과값을 넘기고 넘기고 하려면 매개변수가 중요함
 이런 매개변수를 맞춰줘야하는 것 때문에 매개변수의 제네릭으로 만들 수 있다.
+https://gist.github.com/godrm/7f5b8d024e866ab8aa6ef152da693862
+http://public.codesquad.kr/jk/Feedback-20180409.pdf
+http://jasonlarsen.me/2015/05/23/pipes.html
+
 
 
 #### 4/12 강의
