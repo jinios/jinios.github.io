@@ -361,3 +361,27 @@ class HTMLElement {
 객체를 내가 만들고 해당 객체를 다른 객체로 넘기고싶은데(retain -> release) 오너십을 옮기는 동안 객체를 보존할 방법
 오브젝티브 C - @autoreleasepool
 스위프트 - autoreleasepool 클로저. 객체가 자주 많이 생기는 경우에는 autoreleasepool을 사용해야 할때가 있다
+
+
+## GCD에서 weak self 사용
+- 반드시 써야 하는 것은 아님
+  - DispatchQueue를 사용하면서 클로저에서 캡쳐하는 경우에는 참조 cycle에 영향은 없다.
+  - 이런 의미로 "반드시 사용"해야하는 것은 아니라고는 하지만 비정상적인 동작을 막기위해서는 사용해야한다.
+- 아래와 같은 상황에서는 비정상적인 동작을 막기위해 [weak self]를 사용하는 것이 권장된다.
+
+- 주소록이 다 fetch되고(비동기작업) 뷰를 다시 그리기위해 reloadData하는 작업을 핸들러로 넘기기 위한 함수 resetTableView()
+- 클로저는 queue가 가지고있음
+- 클로저내부에서 가리키는 self는 vc임
+- 참조사이클이 올라가진 않음
+- 만약에 뷰컨트롤러가 없어지는 상황에서 해당 함수가 실행되면 강한참조가 된 self를 찾아서 실행하려고하기 때문에 문제가 일어날 수 있다.
+- 쉽게말해서 해당 뷰컨트롤러가 화면에서 없어지거나 해서 deinit됐는데 resetTableView가 실행되면 클로저 내부의 self가 가리키는값이 없으니 문제가 일어난다는 얘기
+
+queue에서
+```swift
+// AddressBookViewController
+    private func resetTableView() {
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+```
