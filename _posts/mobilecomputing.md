@@ -427,3 +427,7 @@ class ViewController: UIViewController, WKUIDelegate {
 - [참고링크 1](https://medium.com/yay-its-erica/viewdidload-vs-loadview-swift3-47f4ad195602
 )
 - [참고링크 2](https://www.clien.net/service/board/cm_app/1254193)
+
+[additionalSafeAreaInsets](https://developer.apple.com/documentation/uikit/uiviewcontroller/2902284-additionalsafeareainsets)를 통해서 루트뷰의 safeArea 오토레이아웃 가이드를 바꿀 수 있다!
+웹뷰가 루트뷰로 정의된 다음부터는 safeArea가이드가 안먹고 무조건 화면 전체를 다 차지하길래 찾아보다가 임의로 뷰컨트롤러보다 더 상위(appDelegate)에서 루트뷰에다가 additionalSafeAreaInsets을 주면 임의로 바뀌기는 함..
+또한, 루트뷰는 기본적으로 전체 화면을 다 채운다!
