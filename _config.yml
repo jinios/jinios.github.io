@@ -1,10 +1,10 @@
 # Site Info
 title: JINiOS
-tagline: 'JINiOS / Study log :-)'
+tagline: '공부 연습장 :-)'
 description: 'A Jekyll theme adapted from <a href="http://lanyon.getpoole.com/" target="_blank">Lanyon</a>. Made by <a href="http://codinfox.github.io" target="_blank">@codinfox</a>.'
 baseurl: ""
 url: https://jinios.github.io
-# logo: '/public/logo.png'
+logo: '/public/logo.png'
 
 # Site configurations
 gems:
