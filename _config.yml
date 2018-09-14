@@ -39,8 +39,8 @@ nav:
     - { TIL: '/blog/categories/#TIL' }
     - { Swift: '/blog/categories/#Swift' }
     - { iOS: '/blog/categories/#iOS' }
-    - { JAVA: '/blog/categories/#JAVA' }
-    - { Codesquad: '/blog/categories/#Codesquad' }
+    # - { JAVA: '/blog/categories/#JAVA' }
+    # - { Codesquad: '/blog/categories/#Codesquad' }
     - { Study: '/blog/categories/#Study' }
     - { Story: '/blog/categories/#Story' }
     - { Tags: '/blog/tags/' }
