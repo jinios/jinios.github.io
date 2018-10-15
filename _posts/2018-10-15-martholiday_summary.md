@@ -15,11 +15,11 @@ categories: Project
 - 푸시 서비스: 즐겨찾는 마트의 휴무일 하루 전 날 푸시 알림
 
 ## 스크린샷
-<img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh06.png" width="40%"><img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh01.png" width="40%">
+<img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh06.png" width="10%"><img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh01.png" width="10%">
 
-<img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh02.png" width="40%"><img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh03.png" width="40%">
+<img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh02.png" width="10%"><img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh03.png" width="10%">
 
-<img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh04.png" width="40%"><img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh05.png" width="40%">
+<img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh04.png" width="10%"><img src="{{ site.url }}/assets/img/post_img/2018-10-15-mh05.png" width="10%">
 
 ### 문의
 E-mail: [jinios.dev@gmail.com](mailto:jinios.dev@gmail.com)
