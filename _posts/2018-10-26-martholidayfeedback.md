@@ -10,7 +10,6 @@ categories: Project
 - 수행기간: 2018.08 ~ 2018.10
 - GitHub을 통한 버전관리 사용: feature별, build version 별 브랜치 관리
 - [App Store](https://itunes.apple.com/kr/app/%EB%A7%88%ED%8A%B8%EC%89%AC%EB%8A%94%EB%82%A0-%ED%9C%B4%EB%AC%B4%EC%9D%BC-%EC%95%8C%EB%A6%AC%EB%AF%B8/id1438702208?mt=8)
-- [GitHub](https://github.com/jinios/mart-holiday-app)
 
 ## 앱의 주요 기능
 - 브랜드별 마트 검색기능, 상세정보를 제공한다.
@@ -18,6 +17,10 @@ categories: Project
 - 즐겨찾는 마트의 휴무일을 앱 메인 화면과 위젯에서 확인할 수 있다.
 - 즐겨찾는 마트의 휴무일 하루 전, 유저에게 푸시로 휴무일 알림을 보낸다.
   - 푸시 기능은 FCM(Firebase Cloud Messaging)과 Firebase DB를 사용하여 구현함
+
+### 제 앱은 이렇게 생겼습니다
+<img src="{{ site.url }}/assets/img/post_img/mart2.png" width="100%">
+
 
 ## 만들게 된 동기
 - 처음에 iOS시작할때, **때가 되면 내가 필요한 앱을 만들어보자는 목표가 있었다.**
@@ -80,4 +83,4 @@ categories: Project
 
 ## 회고
 - 하지만 이 경험을 토대로 **앞으로 다른 프로젝트를 할때 겪을 시행착오를 미리 겪었다고 생각한다.** 이젠 프레임워크 디펜던시나, 앱 배포 과정에서 필요한 프로비저닝 파일생성, 프로젝트 빌드 세팅, Test Flight배포, 그리고 멘탈관리...등 여러 방면에서 어떤 것이 문제인지 파악하는 능력이 생긴 것 같고 배운 것을 토대로 앞으로 더 잘할 수 있을것 같다 : )
-- 앞으로 버전업을 계속해가면서 기능을 좀 더 추가할 예정인데, [GitHub README](https://github.com/jinios/mart-holiday-app)에 기재한 개선점을 토대로 계속 코드도 개선해나갈 예정이다.
+- 앞으로 버전업을 계속해가면서 기능을 좀 더 추가할 예정인데, 개선점을 토대로 계속 코드도 개선해나갈 예정이다.
