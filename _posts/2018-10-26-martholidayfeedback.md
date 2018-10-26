@@ -6,6 +6,7 @@ categories: Project
 ---
 
 ## 프로젝트 개요
+- 마트 휴무일을 검색하기 귀찮은 사람들을 위한 마트쉬는날 알리미 iOS앱
 - 팀프로젝트(iOS 1명 + 백엔드 1명)
 - 수행기간: 2018.08 ~ 2018.10
 - GitHub을 통한 버전관리 사용: feature별, build version 별 브랜치 관리
