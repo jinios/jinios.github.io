@@ -24,7 +24,7 @@ categories: Story
 - 다양한 관점을 가진 여럿이 모여서 일의 효율성을 높이기 위해서는 코드스타일을 통합할 필요가 있다. 다만 모든 룰을 적용할때는 합의를 바탕으로 하는 것이 필수이고, 공통의 룰로 판단하는 기준은 이 구문의 의도와 역할이 무엇인지에 초점
 - SwiftLint라는 라이브러리가 있는데, 이를 통해서 띄어쓰기나 indent 등 개발자가 놓치기 쉬운 사소한 것들은 자동화하여 보정, 개발자는 비즈니스 로직에만 집중할 수 있도록 해줌
   - SwiftLint는 스위프트 개발자들이 가장 많이 쓰는 컨벤션 도구입니다. 제가 개인 프로젝트를 만들때 사용하는 라이브러리이기도 합니다. 처음에 적용했을땐 Swift컨벤션에 안맞으면 warning도 아니고 error가 떠서 빌드조차 할 수 없는데, 툴이 맞춰주는  규칙으로 차츰 개선해나가다보면 공식 컨벤션에 맞는 코드를 만들 수 있어서 좋았습니다. 특히 발표에서 설명한대로 indent나 공백 등에 신경쓰지 않고 로직에만 집중 할 수 있어서 좋았습니다.
-  - SwiftLint
+  - [SwiftLint](https://github.com/realm/SwiftLint/blob/master/README_KR.md)
 
 ### MVC탈출기
 
@@ -51,8 +51,8 @@ categories: Story
 - CoreML프레임워크를 이용해서 미니 프로젝트 한 후기를 설명하면서 머신러닝 모델을 세팅할때 어떤 점을 주의해야하는지, 쉽고 가볍게 쓰기엔 어떤 툴을 사용했는지 설명하는 세션이었습니다. 지폐에 얼굴을 합성하면 재밌겠다는 아이디어로 시작되어 머신러닝 모델링에 시행착오를 겪은 이야기, 결국에 더 모델링에 효과적인 방법을 적용해서 성공했다는 이야기를 듣고 나니 어렵게만 느껴졌던 머신러닝이 좀 더 친숙(?)해지는 계기가 되었습니다!
 - ARKit: 애플이 제공하는 증강현실 프레임워크
   - https://developer.apple.com/documentation/arkit
-- CoreML: 머신러닝 모델 제공 프레임워크
-  - https://developer.apple.com/documentation/coreml
+- Create ML: 머신러닝 모델 제공 프레임워크
+  - https://developer.apple.com/documentation/createml
 - Turi Create: 커스텀 머신러닝 모델을 간단하게 발달시킬 수 있게 하는 라이브러리
   - https://github.com/apple/turicreate
 
