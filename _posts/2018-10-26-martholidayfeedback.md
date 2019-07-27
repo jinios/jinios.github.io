@@ -8,8 +8,7 @@ categories: Project
 ## 프로젝트 개요
 - 마트 휴무일을 검색하기 귀찮은 사람들을 위한 마트쉬는날 알리미 iOS앱
 - 팀프로젝트(iOS 1명 + 백엔드 1명)
-- 수행기간: 2018.08 ~ 2018.10
-- GitHub을 통한 버전관리 사용: feature별, build version 별 브랜치 관리
+- 수행기간: 2018.08 ~ 
 - [App Store](https://itunes.apple.com/kr/app/%EB%A7%88%ED%8A%B8%EC%89%AC%EB%8A%94%EB%82%A0-%ED%9C%B4%EB%AC%B4%EC%9D%BC-%EC%95%8C%EB%A6%AC%EB%AF%B8/id1438702208?mt=8)
 
 ## 앱의 주요 기능
